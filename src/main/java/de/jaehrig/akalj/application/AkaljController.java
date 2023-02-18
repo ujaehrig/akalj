@@ -1,6 +1,10 @@
 package de.jaehrig.akalj.application;
 
-import de.jaehrig.akalj.infrastructure.SwkaClient;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
+
+import de.jaehrig.akalj.domain.GarbageCalendar;
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
@@ -21,22 +25,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class AkaljController {
 
-    private final SwkaClient client;
-    private final de.jaehrig.akalj.domain.HtmlExtractor extractor;
+    private final GarbageCalendar garbageCalendar;
 
     @Autowired
-    public AkaljController(final SwkaClient client, de.jaehrig.akalj.domain.HtmlExtractor extractor) {
-        this.client = client;
-        this.extractor = extractor;
+    public AkaljController(final GarbageCalendar garbageCalendar) {
+        this.garbageCalendar = garbageCalendar;
     }
 
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, List<LocalDate>> getJson(@RequestParam String street, @RequestParam String number) {
+    public Map<String, List<LocalDate>> getJson(@RequestParam final String street,
+                                                @RequestParam final String number) {
         return getMap(street, number);
     }
 
     @GetMapping(path = "", produces = "text/calendar")
-    public String getIcal(@RequestParam String street, @RequestParam String number) {
+    public String getIcal(@RequestParam final String street,
+                          @RequestParam final String number) {
         Calendar calendar = new Calendar().withDefaults().getFluentTarget();
         UidGenerator ug = new RandomUidGenerator();
 
@@ -51,7 +55,9 @@ public class AkaljController {
     }
 
     private Map<String, List<LocalDate>> getMap(final String street, final String number) {
-        var page = client.getPage(street, number);
-        return extractor.extract(page);
+         return garbageCalendar.calendarEntries(street, number)
+                .stream()
+                .map(e -> new SimpleEntry<>(e.type().toString(), e.date()))
+                .collect(groupingBy(SimpleEntry::getKey, mapping(SimpleEntry::getValue, toList())));
     }
 }

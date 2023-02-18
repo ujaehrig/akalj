@@ -10,3 +10,14 @@ management:
   server:
     port: 8081
 
+akalj:
+  garbage-types:
+    BIO:
+      - Bioabfall
+    RESTMUELL:
+      - Restmüll
+    PAPIER:
+      - Papier
+    WERTSTOFF:
+      - Wertstoff
+
