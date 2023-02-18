@@ -7,17 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 class KaWebsite implements GarbageCalendar {
 
     private final SwkaClient client;
     private final HtmlExtractor extractor;
     final Map<String, List<String>> garbageTypes;
 
-    @Autowired
     KaWebsite(final SwkaClient client, final HtmlExtractor extractor, final ApplicationConfiguration config) {
         this.client = client;
         this.extractor = extractor;
