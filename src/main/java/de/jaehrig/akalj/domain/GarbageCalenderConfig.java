@@ -1,5 +1,6 @@
 package de.jaehrig.akalj.domain;
 
+import de.jaehrig.akalj.infrastructure.AddressRepository;
 import de.jaehrig.akalj.infrastructure.SwkaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,20 +8,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GarbageCalenderConfig {
 
-    private final SwkaClient client;
-    private final HtmlExtractor extractor;
-    private final ApplicationConfiguration config;
+    private final AddressRepository repository;
 
-    GarbageCalenderConfig(final SwkaClient client, final HtmlExtractor extractor, final ApplicationConfiguration config) {
-        this.client = client;
-        this.extractor = extractor;
-        this.config = config;
+    GarbageCalenderConfig(final AddressRepository repository) {
+        this.repository = repository;
     }
 
     @Bean
-    GarbageCalendar garbageCalendar() {
+    GarbageCalendar garbageCalendar(final SwkaClient client, final HtmlExtractor extractor, final ApplicationConfiguration config) {
         KaWebsite garbageCalendar = new KaWebsite(client, extractor, config);
-        return new CachingGarbageCalendarDecorator(garbageCalendar);
+        return new CachingGarbageCalendarDecorator(repository, garbageCalendar);
     }
 
 }
