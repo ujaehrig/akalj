@@ -1,6 +1,6 @@
 package de.jaehrig.akalj.domain;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface GarbageCalendar {
 
@@ -11,6 +11,6 @@ public interface GarbageCalendar {
      * @param street
      * @param number
      */
-    List<CalendarEntry> calendarEntries(String street, String number);
+    Collection<CalendarEntry> calendarEntries(String street, String number);
 
 }

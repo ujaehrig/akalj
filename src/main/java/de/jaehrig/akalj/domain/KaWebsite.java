@@ -3,6 +3,7 @@ package de.jaehrig.akalj.domain;
 import de.jaehrig.akalj.infrastructure.SwkaClient;
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,7 +21,7 @@ class KaWebsite implements GarbageCalendar {
         garbageTypes = Map.copyOf(config.garbageTypes());
     }
 
-    public List<CalendarEntry> calendarEntries(String street, String number) {
+    public Collection<CalendarEntry> calendarEntries(String street, String number) {
         return getMap(street, number).entrySet().stream()
                 .flatMap(e -> e.getValue().stream().map(v -> new SimpleEntry<>(e.getKey(), v)))
                 .filter(e -> fromString(e.getKey()).isPresent())
