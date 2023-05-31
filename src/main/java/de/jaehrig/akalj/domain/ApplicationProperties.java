@@ -5,6 +5,6 @@ import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("akalj")
-public record ApplicationConfiguration(
+public record ApplicationProperties(
         Map<String, List<String>> garbageTypes
 ) {}

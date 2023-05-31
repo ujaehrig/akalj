@@ -15,7 +15,7 @@ class KaWebsite implements GarbageCalendar {
     private final HtmlExtractor extractor;
     final Map<String, List<String>> garbageTypes;
 
-    KaWebsite(final SwkaClient client, final HtmlExtractor extractor, final ApplicationConfiguration config) {
+    KaWebsite(final SwkaClient client, final HtmlExtractor extractor, final ApplicationProperties config) {
         this.client = client;
         this.extractor = extractor;
         garbageTypes = Map.copyOf(config.garbageTypes());

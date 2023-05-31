@@ -14,26 +14,26 @@ public class GarbageCalenderConfig {
 
     private final SwkaClient client;
     private final HtmlExtractor extractor;
-    private final ApplicationConfiguration config;
+    private final ApplicationProperties properties;
 
-    GarbageCalenderConfig(final SwkaClient client, final HtmlExtractor extractor, final ApplicationConfiguration config) {
+    GarbageCalenderConfig(final SwkaClient client, final HtmlExtractor extractor, final ApplicationProperties properties) {
         this.client = client;
         this.extractor = extractor;
-        this.config = config;
+        this.properties = properties;
     }
 
     @Bean
     @ConditionalOnClass({RedisOperations.class})
     GarbageCalendar redisGarbageCalendar(final RedisTemplate<String, String> redisTemplate,
                                          final ObjectMapper objectMapper) {
-        KaWebsite garbageCalendar = new KaWebsite(client, extractor, config);
+        KaWebsite garbageCalendar = new KaWebsite(client, extractor, properties);
         return new RedisGarbageCalenderDecorator(redisTemplate, objectMapper, garbageCalendar);
     }
 
     @Bean
     @ConditionalOnMissingBean(GarbageCalendar.class)
     GarbageCalendar pureGarbageCalendar() {
-        return new KaWebsite(client, extractor, config);
+        return new KaWebsite(client, extractor, properties);
     }
 
 }
