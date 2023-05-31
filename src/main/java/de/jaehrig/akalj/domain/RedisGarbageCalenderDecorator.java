@@ -1,5 +1,7 @@
 package de.jaehrig.akalj.domain;
 
+import static java.util.function.Predicate.not;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,7 +72,7 @@ public class RedisGarbageCalenderDecorator implements GarbageCalendar {
                 .map(CalendarEntry::date)
                 .reduce(this::minDate)
                 .map(d -> Duration.ofDays(ChronoUnit.DAYS.between(LocalDate.now(), d)))
-                .filter(Duration::isPositive)
+                .filter(not(Duration::isNegative))
                 .orElse(Duration.ofDays(1));
     }
 
