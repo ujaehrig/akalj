@@ -1,6 +1,11 @@
 spring:
   application:
     name: akalj
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASS}
+
 
 management:
   endpoint:
