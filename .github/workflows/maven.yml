@@ -51,10 +51,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      working-directory: akalj
       run: mvn -B verify
     - name: Upload Maven build artifact
       uses: actions/upload-artifact@v3
       with:
         name: artifact.jar
-        path: akalj/target/github-actions-java-maven.jar
+        path: target/github-actions-java-maven.jar
