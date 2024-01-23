@@ -22,7 +22,6 @@ public class HtmlExtractor {
     private static final Pattern DATE_PATTERN = Pattern.compile("[0-3]\\d\\.[01]\\d\\.20\\d\\d");
     private static final Pattern FIRST_WORD_PATTERN = Pattern.compile("[^,]*");
 
-
     public Map<String, List<LocalDate>> extract(String htmlDocument) {
         Document document = Jsoup.parse(htmlDocument);
         return Optional.ofNullable(document.getElementById("nfoo"))
@@ -40,8 +39,7 @@ public class HtmlExtractor {
         String key = matcher.find() ? matcher.group() : title;
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        List<LocalDate> value = row.getElementsByClass("col_3-3")
-                .stream()
+        List<LocalDate> value = row.getElementsByClass("col_3-3").stream()
                 .map(Element::text)
                 .flatMap(this::getDates)
                 .map(s -> LocalDate.parse(s, dateTimeFormatter))
@@ -51,9 +49,6 @@ public class HtmlExtractor {
     }
 
     private Stream<String> getDates(final String s) {
-        return DATE_PATTERN.matcher(s)
-                .results()
-                .map(MatchResult::group);
+        return DATE_PATTERN.matcher(s).results().map(MatchResult::group);
     }
-
 }
