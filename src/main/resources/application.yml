@@ -16,6 +16,8 @@ management:
     port: 8081
 
 akalj:
+  baseUrl: "https://web4.karlsruhe.de/service/abfall/akal/akal_2024.php"
+  secure: false
   garbage-types:
     BIO:
       - Bioabfall

@@ -6,5 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("akalj")
 public record ApplicationProperties(
-        Map<String, List<String>> garbageTypes
+        Map<String, List<String>> garbageTypes,
+        String baseUrl,
+        boolean secure
 ) {}

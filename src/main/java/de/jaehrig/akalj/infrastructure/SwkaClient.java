@@ -1,5 +1,6 @@
 package de.jaehrig.akalj.infrastructure;
 
+import de.jaehrig.akalj.domain.ApplicationProperties;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
@@ -18,18 +19,21 @@ public class SwkaClient {
     private final WebClient webClient;
 
     @Autowired
-    public SwkaClient(final WebClient.Builder webClientBuilder) throws SSLException {
+    public SwkaClient(final WebClient.Builder webClientBuilder,
+                      final ApplicationProperties properties) throws SSLException {
 
-        SslContext sslContext = SslContextBuilder.forClient()
+        WebClient.Builder builder = webClientBuilder
+                .baseUrl(properties.baseUrl());
+
+        if (!properties.secure()) {
+            SslContext sslContext = SslContextBuilder.forClient()
                 .trustManager(InsecureTrustManagerFactory.INSTANCE)
                 .build();
-
-        this.webClient = webClientBuilder
-                .baseUrl("https://web4.karlsruhe.de/service/abfall/akal/akal_2024.php")
-                .clientConnector(new ReactorClientHttpConnector(HttpClient.create()
-                        .secure(t -> t.sslContext(sslContext))
-                        .resolver(DefaultAddressResolverGroup.INSTANCE)))
-                .build();
+            builder = builder.clientConnector(new ReactorClientHttpConnector(HttpClient.create()
+                    .secure(t -> t.sslContext(sslContext))
+                    .resolver(DefaultAddressResolverGroup.INSTANCE)));
+        }
+        this.webClient = builder.build();
     }
 
     // 'https://web6.karlsruhe.de/service/abfall/akal/akal.php?strasse=Neureuter%20Hauptstrasse&hausnr=1'
